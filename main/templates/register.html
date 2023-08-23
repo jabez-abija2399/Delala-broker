@@ -13,29 +13,33 @@
           <div class="input-box">
 
             {{ form.FullName.label(class="details form-control-label") }}
-
+            {{ form.FullName }}
           </div>
         
   
           <div class="input-box">
-            {{ form.email.label(class="details") }}             
+            {{ form.email.label(class="details") }}
+            {{ form.email }}              
           </div>
           <div class="input-box">
             {{ form.phoneNumber.label(class="details") }}
+            {{ form.phoneNumber }}
           </div> 
 
          
              <div class="input-box">
               {{ form.password.label(class="details") }}
+              {{ form.password }}
 
             </div>
             
           <div class="input-box">
             {{ form.confirm_password.label(class="details") }}
+            {{ form.confirm_password }} 
           </div>
           
           <div class="form-group">
-             <div class="input-box">
+             <!-- <div class="input-box"> -->
             <label>Gender</label><br>
             {% for subfield in form.gender %}
             <div class="form-check form-check-inline">
