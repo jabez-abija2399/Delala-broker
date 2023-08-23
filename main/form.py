@@ -5,7 +5,7 @@ from wtforms.fields import SelectMultipleField
 
 
 
-class RegistrationForm(FlaskForm,UserMixin):
+class RegistrationForm(FlaskForm):
     FullName = StringField('Full Name', validators=[DataRequired(), Length(min=4, max=100)])
     # username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[Optional(), Email()])
