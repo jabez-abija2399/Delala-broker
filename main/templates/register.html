@@ -8,30 +8,30 @@
     <div class="screen__content">
 
       <form method="POST" action="">
-        {{ form.hidden_tag() }}
+       
         <div class="user-details form-group">
           <div class="input-box">
 
-            {{ form.FullName() }}
+            {{ form.FullName(class="details formm-control-label") }}
 
           </div>
         
   
           <div class="input-box">
-            {{ form.email() }}             
+            {{ form.email.label(class="details") }}             
           </div>
           <div class="input-box">
-            {{ form.phoneNumber() }}
+            {{ form.phoneNumber.label(class="details") }}
           </div> 
 
          
              <div class="input-box">
-              {{ form.password() }}
+              {{ form.password.label(class="details") }}
 
             </div>
             
           <div class="input-box">
-            {{ form.confirm_password()}}
+            {{ form.confirm_password.label(class="details") }}
           </div>
           
           <div class="form-group">
@@ -39,7 +39,7 @@
             <label>Gender</label><br>
             {% for subfield in form.gender %}
             <div class="form-check form-check-inline">
-                {{ subfield() }}
+                {{ subfield(class="form-check-input") }}
                 <label class="form-check-label" style="font-size: 12px;">{{ subfield.label }}</label>
             </div>
         {% endfor %}
@@ -50,13 +50,12 @@
         {# <div class="button">
         <input type="submit" value="Register"> </div> #}
         <div class="button">
-          {{ form.submit() }}
+          {{ form.submit(class="button") }}
         </div>
       </div>
       </div>
         <div>
           <small>
-            Already Have An Account? <a href="{{ url_for('route.login') }}">Sign In</a>
           </small>
         </div>
 
