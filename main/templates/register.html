@@ -1,46 +1,66 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>User_registration</title>
-	<link rel="stylesheet" type="text/css" href="stylle.css">
-</head>
-<body>
+{% extends "layout.html"%}
 
-	
-	<div>
-		<h1>Create Account</h1>
-		<form>
-			<label> Full Name: 
-				<input type="text" name="name" placeholder="Yabets kifle"><br>
-			
-			<label> 
-				Gmail:	
-				<input type="text" name="name" placeholder="yabetskifle9@gmail.com"><br>
-			</label>
-			<label>
-				Phone Number:
-				<input type="text" name="Phone_Number" placeholder="+25192299469"><b><br>
-			</label>
-			<label>
-				Enter_Passwor:
-				<input type="password" name="Password" placeholder="*******"><br>
-			<label>
-			<label>
-				Retype Password:
-				<input type="password" name="retype_password" placeholder="******	"><br>
-			</label>
-			<label>
-				Gender <br>
-				<input type="radio" name="male-radio">male<br>
-				<input type="radio" name="female-radio">female<br>
-			</label>
-			<label>
-				<button>Create acount</button>
-			</label>
-		</form>
-	</div>
+{% block content %}
+<body>
+<div class="container">
+  <div class="title">CREATE ACCOUNT</div>
+  <div class="content">
+    <div class="screen__content">
+
+      <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="user-details form-group">
+          <div class="input-box">
+
+            {{ form.FullName.label(class="details formm-control-label") }}
+
+          </div>
+        
+  
+          <div class="input-box">
+            {{ form.email.label(class="details") }}             
+          </div>
+          <div class="input-box">
+            {{ form.phoneNumber.label(class="details") }}
+          </div> 
+
+         
+             <div class="input-box">
+              {{ form.password.label(class="details") }}
+
+            </div>
+            
+          <div class="input-box">
+            {{ form.confirm_password.label(class="details") }}
+          </div>
+          
+          <div class="form-group">
+             <div class="input-box">
+            <label>Gender</label><br>
+            {% for subfield in form.gender %}
+            <div class="form-check form-check-inline">
+                {{ subfield(class="form-check-input") }}
+                <label class="form-check-label" style="font-size: 12px;">{{ subfield.label }}</label>
+            </div>
+        {% endfor %}
+          </div>
+        </div> 
+      </div>
+       
+        {# <div class="button">
+        <input type="submit" value="Register"> </div> #}
+        <div class="button">
+          {{ form.submit(class="button") }}
+        </div>
+      </div>
+      </div>
+        <div>
+          <small>
+            Already Have An Account? <a href="{{ url_for('route.login') }}">Sign In</a>
+          </small>
+        </div>
+
+      </form>
 
 </body>
-</html>
+{% endblock content %}
