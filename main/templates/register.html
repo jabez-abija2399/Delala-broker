@@ -12,26 +12,26 @@
         <div class="user-details form-group">
           <div class="input-box">
 
-            {{ form.FullName.label(class="details formm-control-label") }}
+            {{ form.FullName() }}
 
           </div>
         
   
           <div class="input-box">
-            {{ form.email.label(class="details") }}             
+            {{ form.email() }}             
           </div>
           <div class="input-box">
-            {{ form.phoneNumber.label(class="details") }}
+            {{ form.phoneNumber() }}
           </div> 
 
          
              <div class="input-box">
-              {{ form.password.label(class="details") }}
+              {{ form.password() }}
 
             </div>
             
           <div class="input-box">
-            {{ form.confirm_password.label(class="details") }}
+            {{ form.confirm_password()}}
           </div>
           
           <div class="form-group">
@@ -39,7 +39,7 @@
             <label>Gender</label><br>
             {% for subfield in form.gender %}
             <div class="form-check form-check-inline">
-                {{ subfield(class="form-check-input") }}
+                {{ subfield() }}
                 <label class="form-check-label" style="font-size: 12px;">{{ subfield.label }}</label>
             </div>
         {% endfor %}
@@ -50,7 +50,7 @@
         {# <div class="button">
         <input type="submit" value="Register"> </div> #}
         <div class="button">
-          {{ form.submit(class="button") }}
+          {{ form.submit() }}
         </div>
       </div>
       </div>
