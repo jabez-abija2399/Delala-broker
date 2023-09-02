@@ -1,0 +1,102 @@
+body {
+  background-color: #408080; /* Change background color to cyan dark */
+/*  background-color: #008080;*/
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.content {
+  background-color: #323232; /* Change form background color */
+  padding: 20px;
+  border-radius: 10px;
+  color: #ffffff;
+  width: 400px;
+}
+
+.input-box {
+  margin-bottom: 20px;
+}
+
+.label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #ffffff;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+}
+
+.button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.button input[type="submit"] {
+  background-color: #008b8b;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button input[type="submit"]:hover {
+  background-color: #006060;
+}
+
+.small {
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.small a {
+  color: #ffffff;
+}
+
+.invalid-feedback {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.form-check-label {
+  font-size: 12px;
+  color: #ffffff;
+}
+
+/* Responsive styles */
+
+@media (max-width: 600px) {
+  .content {
+    width: 90%;
+  }
+}
+
+/* Adjust label font size */
+
+.label {
+  font-size: 14px;
+}
+
+/* Rest of the CSS code remains the same */
+
+.href {
+  color: cyan;
+  font-size: 15;
+}
