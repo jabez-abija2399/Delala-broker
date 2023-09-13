@@ -11,7 +11,7 @@
                     <!-- <img class="img-fluid img-fluids" src="./img/carousel-1.jpg" alt=""> -->
                     <img class="img-fluid img-fluids"  src="{{ url_for('static', filename='img/carousel-1.jpg') }}" alt="">
 
-                    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(4   , 57, 64, .5);">
+                    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(4, 57, 64, .5);">
                         <div class="container">
                             <div class="row justify-content-start">
                                 <div class="col-10 col-lg-8">
@@ -42,14 +42,10 @@
 
         {% include 'components/search.html' %}
 
+<!-- <div class="container-xxl py-5">
+    <div class="container"> -->
+        {% include 'services.html' %}  
 
-        {% for listing in listings %}
-            <div>
-                <h3>{{ listing.city }}</h3>
-                <p>Price: {{ listing.price }}</p>
-                <img src="{{ url_for('static', filename='uploads/' + listing.image_filename) }}" alt="Listing Image">
-            </div>
-        {% endfor %}
 
 
 <!-- ... Other content ... -->

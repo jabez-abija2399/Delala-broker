@@ -96,9 +96,15 @@
 
 .navbar-dark .navbar-nav .nav-link:hover,
 .navbar-dark .navbar-nav .nav-link.active,
-.navbar-light .navbar-nav .nav-link:hover,
-.navbar-light .navbar-nav .nav-link.active {
+.navbar-light .navbar-nav .nav-link.active
+
+{
     color: var(--primary);
+    transition: color 0.5s;
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: var(--secondary);
 }
 
 @media (max-width: 991.98px) {
@@ -257,12 +263,12 @@
 .cat-item {
     display: block;
     box-shadow: 0 0 45px rgba(0, 0, 0, .08);
-    border: 1px solid transparent;
-    transition: .5s;
+    border: 1px solid darkcyan;
+    transition: 0.5s;
 }
 
 .cat-item:hover {
-    border-color: rgba(0, 0, 0, .08);
+    border-color: rgba(10, 0, 0, .08);
     box-shadow: none;
 }
 
@@ -396,7 +402,7 @@
     size: 10px;
 }
 
-.btn{
+.btn1{
     background-color: darkcyan;
     border-color: none;
 }
@@ -411,5 +417,58 @@
 
 .m-0 {
     color: darkcyan;
+}
+
+.container-xxl {
+    border-bottom: solid;
+}
+
+
+
+/* Style for the product list container */
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Style for each product */
+.product {
+    width: calc(33.33% - 20px); /* Adjust the width to fit 3 products in a row, considering margin */
+    margin: 10px;
+    border: 2px solid darkcyan;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 5px rgba(10, 10, 10, 0.2);
+    transition: transform 0.3s ease-in-out;
+    background-color: #EFF0e5;
+    text-align: center;
+}
+
+/* Style for the listing image */
+.product-image img {
+    max-width: 100%;
+    height: 300px;
+    border-radius: 5px;
+    border: 2px solid black;
+
+}
+
+/* Style for the product details */
+.product-details h3 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.product-details .price {
+    font-size: 1rem;
+    color: #007bff; /* Change to your desired price color */
+    margin: 10px 0;
+}
+
+/* Hover effect to scale up the product on hover */
+.product:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 

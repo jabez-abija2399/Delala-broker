@@ -15,6 +15,10 @@
         <form method="POST" enctype="multipart/form-data" class="my-form">
             {{ form.hidden_tag() }}
             <div class="form-group">
+                <label for="catagories">catagories:</label>
+                {{ form.catagories(class="form-control-file") }}
+            </div>
+            <div class="form-group">
                 <label for="city">City:</label>
                 {{ form.city(size=20, class="form-control") }}
             </div>
@@ -23,12 +27,8 @@
                 {{ form.contact_information(size=20, class="form-control") }}
             </div>
             <div class="form-group">
-                <label for="address">Address:</label>
-                {{ form.address(size=20, rows=3, class="form-control") }}
-            </div>
-            <div class="form-group">
-                <label for="kebele">Kebele:</label>
-                {{ form.kebele(size=20, class="form-control") }}
+                <label for="subcity">Subcity:</label>
+                {{ form.sub_City(size=20, rows=3, class="form-control") }}
             </div>
             <div class="form-group">
                 <label for="description">Description:</label>
@@ -46,10 +46,7 @@
                 <label for="video">Upload Video:</label>
                 {{ form.video_filename(class="form-control-file") }}
             </div>
-            <div class="form-group">
-                <label for="document">Upload Document:</label>
-                {{ form.document_filename(class="form-control-file") }}
-            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

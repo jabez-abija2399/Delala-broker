@@ -60,3 +60,39 @@ button[type="submit"]:hover {
     background-color: green; /* Dark cyan background on hover */
     color: white;
 }
+
+
+ 
+.lab {
+    color: darkcyan;
+    border: solid ;
+}
+.box{
+
+    border: solid black;
+}
+
+/* Define styles for the listing title */
+.listing-title {
+    font-size: 24px;
+    color: #333;
+}
+
+/* Define styles for the listing image */
+.listing-image {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Define styles for listing information paragraphs */
+.listing-info {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Define styles for the video link */
+.listing-info a {
+    text-decoration: none;
+    color: #007bff;
+}

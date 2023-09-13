@@ -34,14 +34,16 @@ class Listing(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String(255), nullable=False)
-    contact_information = db.Column(db.String(255), nullable=False)
-    address = db.Column(db.Text, nullable=False)
-    kebele = db.Column(db.String(50), nullable=False)
+    sub_City = db.Column(db.Text, nullable=False)
+    contact_information = db.Column(db.String(255), nullable=True)
+    # kebele = db.Column(db.String(50), nullable=False)
+    catagories = db.Column(db.Text, nullable=True)
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.String(50), nullable=False)
-    image_filename = db.Column(db.String(255))
+    # max_price = db.Column(db.String(50), nullable=False) 
+    image_filename = db.Column(db.String(255), nullable=True)
     video_filename = db.Column(db.String(255))
-    document_filename = db.Column(db.String(255))
+    # document_filename = db.Column(db.String(255))
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     
     def __repr__(self):
