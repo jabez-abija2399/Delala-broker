@@ -15,35 +15,37 @@
         <form method="POST" enctype="multipart/form-data" class="my-form">
             {{ form.hidden_tag() }}
             <div class="form-group">
-                <label for="catagories">catagories:</label>
-                {{ form.catagories(class="form-control-file") }}
+                
+                {{form.catagories.label(for="catagories")}}
+                {{ form.catagories(class="form-select border-0") }}
             </div>
             <div class="form-group">
-                <label for="city">City:</label>
-                {{ form.city(size=20, class="form-control") }}
+                
+                {{form.city.label(for="city")}}
+                {{ form.city(class="form-select border-0") }}
             </div>
             <div class="form-group">
-                <label for="contact_information">Contact Information:</label>
+                {{form.contact_information.label(for="contact_information")}}
                 {{ form.contact_information(size=20, class="form-control") }}
             </div>
             <div class="form-group">
-                <label for="subcity">Subcity:</label>
-                {{ form.sub_City(size=20, rows=3, class="form-control") }}
+                {{form.sub_City.label(for="sub_City")}}
+                {{ form.sub_City(class="form-select border-0") }}
             </div>
             <div class="form-group">
-                <label for="description">Description:</label>
+                {{form.description.label(for="description")}}
                 {{ form.description(rows=5, class="form-control") }}
             </div>
             <div class="form-group">
-                <label for="price">Price:</label>
+                {{form.price.label(for="price")}}
                 {{ form.price(size=10, class="form-control") }}
             </div>
             <div class="form-group">
-                <label for="image">Upload Image:</label>
+                {{form.image_filename.label(for="image_filename")}}
                 {{ form.image_filename(class="form-control-file") }}
             </div>
             <div class="form-group">
-                <label for="video">Upload Video:</label>
+                {{form.video_filename.label(for="video_filename")}}
                 {{ form.video_filename(class="form-control-file") }}
             </div>
 
