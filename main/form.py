@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,SelectField,RadioField,BooleanField,TextAreaField,FileField
+from wtforms import StringField,PasswordField,SubmitField,BooleanField,SelectField,RadioField,BooleanField,TextAreaField,FileField,DecimalField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,Optional,ValidationError
 from .models import User
 from wtforms.fields import SelectMultipleField
@@ -35,7 +35,8 @@ class LoginForm(FlaskForm):
 class UploadForm(FlaskForm):
     city = StringField('City', validators=[DataRequired()])
     contact_information = StringField('Contact Information', validators=[DataRequired()])
-    catagories = StringField('catagories', validators=[DataRequired()])
+    # catagories = StringField('catagories', validators=[DataRequired()])
+    catagories = SelectField('Categories', choices=[('', ''), ('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('HomeSell', 'Home Sell'),('Land Sell', 'Land Sell'),('other', 'Others')])
     sub_City = TextAreaField('subcity', validators=[DataRequired()])
     # kebele = StringField('Kebele', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
@@ -44,3 +45,12 @@ class UploadForm(FlaskForm):
     image_filename = FileField('Upload Image')
     video_filename = FileField('Upload Video')
     # document_filename = FileField('Upload Document')
+
+
+class SearchForm(FlaskForm):
+    catagories = SelectField('Catagories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('HouseSell', 'House Sell'),('other', 'Others')])
+    min_price = DecimalField('Minimum Price')
+    max_price = DecimalField('Maximum Price')
+    city = SelectField('City')
+    sub_City = SelectField('Sub City')
+    submit = SubmitField('Search')
