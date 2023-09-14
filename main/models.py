@@ -47,4 +47,4 @@ class Listing(db.Model):
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     
     def __repr__(self):
-        return f"<Listing(id={self.id}, city='{self.city}', address='{self.address}')>"
+        return f"<Listing(id={self.id}, city='{self.city}')>"

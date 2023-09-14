@@ -129,6 +129,7 @@ def catagories():
 @auth.route('/contact')
 @login_required
 def contact():
+
     return render_template('contact.html')
 
 
@@ -183,9 +184,24 @@ def view_listing(listing_id):
 
 @auth.route('/search', methods = ['GET', 'POST'])
 def search():
+     # Fetch data from the database
+    # data = Listing.query.all()
     form = SearchForm()
     results = []
-    return render_template('components/search.html', form=form)
+    if form.validate_on_submit():
+        catagory = form.catagories.data
+        minPrice = form.min_price.data
+        maxPrice = form.max_price.data
+        City = form.city.data
+        SubCity = form.sub_City.data
+        
+        data = Listing.query.filter_by(catagories=catagory, city=City).first()
+        if data:
+            return redirect(url_for('auth.home'))
+        
+        # search logic based on the parameters
+
+    return render_template('search.html', form=form)
 
 @auth.route('/logout')
 @login_required

@@ -31,13 +31,119 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
+# List of all areas in Addis Ababa
+areas_list = [
+    "Addis Ketema",
+    "Addis Sefer",
+    "Adiss",
+    "Agusta",
+    "Akaki-Kaliti",
+    "Amanuel Area",
+    "American Gibi",
+    "Arat Kilo",
+    "Ayat",
+    "Ayertena",
+    "Bantyiketu",
+    "Beg Tera",
+    "Beherawi",
+    "Bekelo Bet",
+    "Berberee Berenda",
+    "Besrat Gebriel",
+    "Bole",
+    "Bole Ayat",
+    "Bole Mikael",
+    "Bulgariya Mazoriya",
+    "Cabana",
+    "Ched Tera",
+    "Coca",
+    "Darmar",
+    "District 3",
+    "Doro Tera",
+    "Gebre Kristos Bete Kristiyan",
+    "Geja Seffer",
+    "Gerji",
+    "Ghiliffalegn Stream",
+    "Giorgis",
+    "Goma Kuteba",
+    "Gotera",
+    "Great Acachi",
+    "Gulele Bota",
+    "Haile Garment",
+    "Hana",
+    "Harbu Shet’",
+    "Irtu Bota",
+    "Jemo",
+    "Jos Hanssen",
+    "Kara",
+    "Kara Alo",
+    "Kazanchis",
+    "Kera",
+    "Ketena Hulet",
+    "Kirkos",
+    "Kolfe Keranio",
+    "Kolfe Keranyo",
+    "Korech Tera",
+    "Kotebe",
+    "Kurtume Stream",
+    "Lafto",
+    "Lancha",
+    "Lebu",
+    "Lebu Mebrathayil",
+    "Legahar",
+    "Lideta",
+    "Lideta Gebri’El Bete Kristiyan",
+    "Mechare Meda",
+    "Megenagna",
+    "Mekanisa",
+    "Mekanisa Abo",
+    "Menahereya Kazanchis",
+    "Menisa",
+    "Meshuwalekiya",
+    "Meskel Flower",
+    "Mesob Tera",
+    "Mexico",
+    "Microlink Project",
+    "Minalesh Tera",
+    "Mobil",
+    "Molla Maru",
+    "Nefas Silk-Lafto",
+    "Olympia",
+    "Piassa (piazza)",
+    "Repi",
+    "Riche",
+    "Rwanda",
+    "Sarbet",
+    "Saris",
+    "Saris Abo Area",
+    "Sebategna",
+    "Sengatera",
+    "Shekela Tera",
+    "Shema Tera",
+    "Somale Tera",
+    "Soste Kuter Mazoria (Total)",
+    "Sunshine Real state",
+    "Tekelehaymanot",
+    "Tor Hiylloch",
+    "Urael",
+    "Vatican",
+    "Wello Sefer",
+    "Yedejazmach Alula Irsha",
+    "Yeka",
+    "Yeka Bole Bota",
+    "Zenebework"
+]
+
+# list of tuples for choices
+area_choices = [('', '')] + [(area, area) for area in areas_list]
+
+
 
 class UploadForm(FlaskForm):
-    city = StringField('City', validators=[DataRequired()])
+    city = SelectField('City',choices=area_choices, validators=[DataRequired()])
     contact_information = StringField('Contact Information', validators=[DataRequired()])
     # catagories = StringField('catagories', validators=[DataRequired()])
     catagories = SelectField('Categories', choices=[('', ''), ('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('HomeSell', 'Home Sell'),('Land Sell', 'Land Sell'),('other', 'Others')])
-    sub_City = TextAreaField('subcity', validators=[DataRequired()])
+    sub_City = SelectField('Sub_City',choices=area_choices, validators=[DataRequired()])
     # kebele = StringField('Kebele', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     price = StringField('Price', validators=[DataRequired()])
@@ -45,12 +151,12 @@ class UploadForm(FlaskForm):
     image_filename = FileField('Upload Image')
     video_filename = FileField('Upload Video')
     # document_filename = FileField('Upload Document')
-
+    submit = SubmitField('Post')
 
 class SearchForm(FlaskForm):
     catagories = SelectField('Catagories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('HouseSell', 'House Sell'),('other', 'Others')])
     min_price = DecimalField('Minimum Price')
     max_price = DecimalField('Maximum Price')
-    city = SelectField('City')
-    sub_City = SelectField('Sub City')
+    city = SelectField('City',choices=area_choices)
+    sub_City = SelectField('Sub_City',choices=area_choices)
     submit = SubmitField('Search')
