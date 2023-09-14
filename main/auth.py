@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, current_user, login_required, logout_user,LoginManager
 from .models import db, User,Listing
-from .form import RegistrationForm, LoginForm,UploadForm
+from .form import RegistrationForm, LoginForm,UploadForm,SearchForm
 from flask_bcrypt import Bcrypt
 import os
 from werkzeug.utils import secure_filename
@@ -23,7 +23,8 @@ def unauthorized():
 @auth.route('/')
 @login_required
 def home():
-    return render_template('home.html')
+    form = SearchForm()
+    return render_template('home.html', form=form)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -143,7 +144,7 @@ def about():
 def service():
     # Fetch data from the database
     all_listings = Listing.query.all()
-
+    form = SearchForm()
     # Create a list to store the data you want to display
     listings_data = []
 
@@ -164,7 +165,7 @@ def service():
         }
         listings_data.append(listing_info)
 
-    return render_template('service.html', listings=listings_data)
+    return render_template('service.html', listings=listings_data, form=form)
 
 
 @auth.route('/post/<int:listing_id>', methods=['GET'])
@@ -180,9 +181,11 @@ def view_listing(listing_id):
 
     return render_template('details.html', listing=listing)
 
-
-
-
+@auth.route('/search', methods = ['GET', 'POST'])
+def search():
+    form = SearchForm()
+    results = []
+    return render_template('components/search.html', form=form)
 
 @auth.route('/logout')
 @login_required
