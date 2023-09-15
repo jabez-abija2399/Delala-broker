@@ -30,7 +30,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/Abija23/Delala-broker/main/delala_brokerss.db'
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config["UPLOAD_FOLDER"] = "Delala-broker/main/static/uploads"  # Specify the folder where you want to save uploaded files
+    app.config["UPLOAD_FOLDER"] = "Delala-broker/main/static/uploads"
     app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "gif", "mp4", "avi", "pdf", "doc", "docx"}  # Specify allowed file extensions
     app.config['STATIC_FOLDER'] = 'static'
 
