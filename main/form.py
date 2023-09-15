@@ -1,10 +1,13 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField,BooleanField,SelectField,RadioField,BooleanField,TextAreaField,FileField,DecimalField
-from wtforms.validators import DataRequired,Length,Email,EqualTo,Optional,ValidationError
-from .models import User
-from wtforms.fields import SelectMultipleField
 from flask_login import LoginManager, UserMixin
+from flask_wtf import FlaskForm
+from wtforms import (BooleanField, DecimalField, FileField, PasswordField,
+                     RadioField, SelectField, StringField, SubmitField,
+                     TextAreaField)
+from wtforms.fields import SelectMultipleField
+from wtforms.validators import (DataRequired, Email, EqualTo, Length, Optional,
+                                ValidationError)
 
+from .models import User
 
 
 class RegistrationForm(FlaskForm,UserMixin):

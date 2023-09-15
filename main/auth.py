@@ -165,6 +165,7 @@ def service():
 
         }
         listings_data.append(listing_info)
+        
 
     return render_template('service.html', listings=listings_data, form=form)
 
@@ -185,9 +186,30 @@ def view_listing(listing_id):
 @auth.route('/search', methods = ['GET', 'POST'])
 def search():
      # Fetch data from the database
-    # data = Listing.query.all()
+    data = Listing.query.all()
     form = SearchForm()
+    listings_data = []
     results = []
+    
+    for listing in data:
+        listing_info = {
+        'id': listing.id,
+        'city': listing.city,
+        'catagories': listing.catagories,
+        'sub_City': listing.sub_City,
+        'price': listing.price,
+        'image_filename': listing.image_filename,
+        'description': listing.description,
+        'contact_information': listing.contact_information,
+        # 'kebele': listing.kebele,
+        'video_filename': listing.video_filename,
+        
+
+    }
+
+    listings_data.append(listing_info)
+ 
+    
     if form.validate_on_submit():
         catagory = form.catagories.data
         minPrice = form.min_price.data
@@ -195,13 +217,22 @@ def search():
         City = form.city.data
         SubCity = form.sub_City.data
         
-        data = Listing.query.filter_by(catagories=catagory, city=City).first()
-        if data:
-            return redirect(url_for('auth.home'))
-        
+        for item in listings_data:
+            print(item)
+            if catagory and item['catagories'] != catagory:
+                continue
+            if minPrice is not None and item['price'] <= minPrice:
+                continue
+            if maxPrice is not None and item['price'] >= maxPrice:
+                continue
+            if City and item['city'] != city:
+                continue
+            if SubCity and item['sub_City'] != SubCity:
+                continue
+            results.append(item)
         # search logic based on the parameters
 
-    return render_template('search.html', form=form)
+    return render_template('search.html', form=form, results=results)
 
 @auth.route('/logout')
 @login_required
