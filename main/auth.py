@@ -56,7 +56,7 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('auth.home'))
     form = RegistrationForm()
-    error_message = None 
+    error_message = None
 
     if form.validate_on_submit():
         if email_already_exists(form.email.data):
@@ -66,14 +66,14 @@ def register():
             error_message = "Phone number already exists. Please choose another."
             flash(error_message, 'danger')
 
-        else:  
+        else:
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             user = User(fullName=form.FullName.data,
                         email=form.email.data, phoneNumber=form.phoneNumber.data,
                         password=hashed_password)
             db.session.add(user)
             db.session.commit()
-                
+
             return redirect(url_for('auth.login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -101,13 +101,13 @@ def upload():
             form.video_filename.data.save(video_upload_path)
         listing = Listing(
             catagories=form.catagories.data,
-            city=form.city.data, 
-            contact_information=form.contact_information.data, 
-            sub_City=form.sub_City.data, 
-            # kebele=form.kebele.data, 
-            description=form.description.data, 
-            price=form.price.data, 
-            image_filename=image_filename, 
+            city=form.city.data,
+            contact_information=form.contact_information.data,
+            sub_City=form.sub_City.data,
+            # kebele=form.kebele.data,
+            description=form.description.data,
+            price=form.price.data,
+            image_filename=image_filename,
             video_filename=video_filename
         )
         db.session.add(listing)
@@ -120,7 +120,7 @@ def upload():
 # @login_required
 # def service():
 #     return render_template('service.html')
-        
+
 @auth.route('/Catagories')
 @login_required
 def catagories():
@@ -161,11 +161,11 @@ def service():
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
             'video_filename': listing.video_filename,
-            
+
 
         }
         listings_data.append(listing_info)
-        
+
 
     return render_template('service.html', listings=listings_data, form=form)
 
@@ -190,7 +190,7 @@ def search():
     form = SearchForm()
     listings_data = []
     results = []
-    
+
     for listing in data:
         listing_info = {
         'id': listing.id,
@@ -203,20 +203,20 @@ def search():
         'contact_information': listing.contact_information,
         # 'kebele': listing.kebele,
         'video_filename': listing.video_filename,
-        
+
 
     }
 
     listings_data.append(listing_info)
- 
-    
+
+
     if form.validate_on_submit():
         catagory = form.catagories.data
         minPrice = form.min_price.data
         maxPrice = form.max_price.data
         City = form.city.data
         SubCity = form.sub_City.data
-        
+
         for item in listings_data:
             print(item)
             if catagory and item['catagories'] != catagory:
