@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block home %}
+    <!-- Header End -->
+    <div class="container-xxl py-5 bg-dark page-header mb-5">
+            <div class="container my-5 pt-5 pb-4">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Post</h1>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- upload_form.html -->
+    <div class="form-container">
+        <h1 class="title">Provide Detailed Information</h1>
+        <form method="POST" enctype="multipart/form-data" class="my-form">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                
+                {{form.catagories.label(for="catagories")}}
+                {{ form.catagories(class="form-select border-0") }}
+            </div>
+            <div class="form-group">
+                
+                {{form.city.label(for="city")}}
+                {{ form.city(class="form-select border-0") }}
+            </div>
+            <div class="form-group">
+                {{form.contact_information.label(for="contact_information")}}
+                {{ form.contact_information(size=20, class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{form.sub_City.label(for="sub_City")}}
+                {{ form.sub_City(class="form-select border-0") }}
+            </div>
+            <div class="form-group">
+                {{form.description.label(for="description")}}
+                {{ form.description(rows=5, class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{form.price.label(for="price")}}
+                {{ form.price(size=10, class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{form.image_filename.label(for="image_filename")}}
+                {{ form.image_filename(class="form-control-file") }}
+            </div>
+            <div class="form-group">
+                {{form.video_filename.label(for="video_filename")}}
+                {{ form.video_filename(class="form-control-file") }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}	 	

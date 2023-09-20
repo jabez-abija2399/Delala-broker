@@ -1,0 +1,144 @@
+/* Add this CSS to your existing style.css or create a new CSS file */
+
+/* Global styles */
+.display-3 {
+    font-size: 48px;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+.form-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: seagreen; /* Dark cyan form background */
+    border-radius: 5px;
+}
+
+.title {
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.my-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: white;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: white;
+    color: #333;
+}
+
+button[type="submit"] {
+    background-color: gray;
+    color: darkcyan; /* Dark cyan submit button color */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: green; /* Dark cyan background on hover */
+    color: white;
+}
+
+
+ 
+.lab {
+    color: darkcyan;
+    border: solid ;
+}
+.box{
+
+    border: solid black;
+}
+
+/* Define styles for the listing title */
+.listing-title {
+    font-size: 24px;
+    color: #333;
+}
+
+/* Define styles for the listing image */
+.listing-image {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Define styles for listing information paragraphs */
+.listing-info {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Define styles for the video link */
+.listing-info a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+
+/* Custom alert container styles */
+.custom-alert-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 9999; /* Ensure the alert appears above other elements */
+}
+
+/* Custom alert box styles */
+.custom-alert-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff; /* Background color for the alert box */
+    color: green;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Box shadow for a subtle effect */
+    text-align: center;
+}
+
+/* Close button styles */
+.custom-alert-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: green;
+}
+
+/* Message text styles */
+#customAlertMessage {
+    margin: 0;
+    font-size: 16px;
+    color: green; /* Text color */
+    background-color: green;
+}
+    
