@@ -46,48 +46,47 @@
         <div class="row g-2">
             <div class="col-md-10">
                 <div class="row g-2">
-                    <div class="col-md-4">
-                        {{form.catagories.label }}
-                        {{form.catagories(class="form-select border-0")}}
-                    </div>
-                    <div class="col-md-4">
-                        {{form.city.label}}
-                        {{form.city(class="form-select border-0")}}
-                    
-                    </div>
-                    <div class="col-md-4">
-                        {{form.sub_City.label}}
-                        {{form.sub_City(class="form-select border-0")}}
-                    
-                    </div>
-                    <div class="col-md-4">
-                        {{form.min_price.label}}
-                        {{form.min_price(class="form-control border-0")}}
-                    
-                    </div>
-                    <div class="col-md-4">
-                        {{form.max_price.label}}
-                        {{form.max_price(class="form-control border-0")}}
-                    
-                    </div>
+   <h1>Search</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <label for="categories">Categories:</label>
+        {{ form.categories }}
+        <br>
+
+        <label for="min_price">Minimum Price:</label>
+        {{ form.min_price }}
+        <br>
+
+        <label for="max_price">Maximum Price:</label>
+        {{ form.max_price }}
+        <br>
+
+        <label for="city">City:</label>
+        {{ form.city }}
+        <br>
+
+        {{ form.submit() }}
+    </form>
+
+
 
                 </div>
             </div>
-            <div class="col-md-10 button">
+            <!-- <div class="col-md-10 button">
                 {{ form.submit(class="button btn btn-dark border-0 w-100") }}
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
 <!-- Search End -->
-
-{% if results %}
-<h2>Search Results</h2>
-<ul>
-    {% for item in results %}
-        <li>{{ item.city }} (Category: {{ item.category }}, Price: ${{ item.price }}, sub_City: {{ item.sub_City}})</li>
-    {% endfor %}
-</ul>
-{% endif %}
+        {% if results %}
+            <h2>Search Results</h2>
+            <ul>
+                {% for item in results %}
+                    <li>{{ item.name }} (Category: {{ item.category }}, Price: ${{ item.price }}, City: {{ item.city }})</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
 {% endblock %}

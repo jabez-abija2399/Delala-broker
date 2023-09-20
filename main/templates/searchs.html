@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    <h1>Search</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <label for="categories">Categories:</label>
+        {{ form.catagories }}
+        <br>
+
+        <label for="min_price">Minimum Price:</label>
+        {{ form.min_price }}
+        <br>
+
+        <label for="max_price">Maximum Price:</label>
+        {{ form.max_price }}
+        <br>
+
+        <label for="city">City:</label>
+        {{ form.city }}
+        <br>
+
+        {{ form.submit() }}
+    </form>
+
+        {% if results %}
+            <h2>Search Results</h2>
+            <ul>
+                {% for item in results %}
+                    <li>{{ item.name }} (Category: {{ item.category }}, Price: ${{ item.price }}, City: {{ item.city }})</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+</body>
+</html>

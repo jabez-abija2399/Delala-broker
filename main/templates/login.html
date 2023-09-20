@@ -10,7 +10,17 @@
       <form method="POST" action="">
         {{ form.hidden_tag() }}
         <div class="user-details">
-
+          {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endwith %}
           <div class="input-box">
   
             {{ form.phoneNumber.label(for="pass", class="label") }}

@@ -1,0 +1,11 @@
+{% for listing in listings %}
+<div class="product-details">                
+    {% if current_user.id == listing.user_id %}
+        <form method="POST" action="{{ url_for('auth.delete_post', listing_id=listing.id) }}">
+            {{ delete_form.hidden_tag() }} <!-- Use delete_form instead of form -->
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">Delete Post</button>
+        </form>
+    {% endif %}     
+</div>
+{% endfor %}

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block home %}
+
+
+
+{% if results %}
+<h2>Search Results</h2>
+<ul>
+    {% for item in results %}
+        <li>{{ item.city }} (Category: {{ item.category }}, Price: ${{ item.price }}, sub_City: {{ item.sub_City}})</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
