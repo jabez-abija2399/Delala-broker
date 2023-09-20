@@ -1,12 +1,13 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for,abort, jsonify
 from flask_login import login_user, current_user, login_required, logout_user,LoginManager
 from .models import db, User,Listing
-from .form import RegistrationForm, LoginForm,UploadForm,SearchForm
+from .form import RegistrationForm, LoginForm,UploadForm,SearchForm,DeleteForm,SearchFormss
 from flask_bcrypt import Bcrypt
 import os
 from werkzeug.utils import secure_filename
 from flask import current_app
 from main import create_app
+import uuid
 
 
 auth = Blueprint('auth', __name__)
@@ -56,7 +57,7 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('auth.home'))
     form = RegistrationForm()
-    error_message = None
+    error_message = None 
 
     if form.validate_on_submit():
         if email_already_exists(form.email.data):
@@ -66,14 +67,14 @@ def register():
             error_message = "Phone number already exists. Please choose another."
             flash(error_message, 'danger')
 
-        else:
+        else:  
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             user = User(fullName=form.FullName.data,
                         email=form.email.data, phoneNumber=form.phoneNumber.data,
                         password=hashed_password)
             db.session.add(user)
             db.session.commit()
-
+                
             return redirect(url_for('auth.login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -83,36 +84,36 @@ def register():
 def upload():
     form = UploadForm()
     if form.validate_on_submit():
-        # Process the form data and file uploads
-        image_filename = None
-        video_filename = None
-        document_filename = None
+        author_id = current_user.id
 
-        if form.image_filename.data:
-            image_filename = secure_filename(form.image_filename.data.filename)
-            image_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], image_filename)
-            os.makedirs(os.path.dirname(image_upload_path), exist_ok=True)
-            form.image_filename.data.save(image_upload_path)
+        # Generate a unique filename (e.g., using a UUID)
+        unique_filename = str(uuid.uuid4()) + secure_filename(form.image_filename.data.filename)
+        image_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], unique_filename)
+        
+        # Save the uploaded file with the unique filename
+        form.image_filename.data.save(image_upload_path)
 
         if form.video_filename.data:
-            video_filename = secure_filename(form.video_filename.data.filename)
-            video_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], video_filename)
-            os.makedirs(os.path.dirname(video_upload_path), exist_ok=True)
+            # Similar logic for generating a unique filename for videos
+            video_unique_filename = str(uuid.uuid4()) + secure_filename(form.video_filename.data.filename)
+            video_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], video_unique_filename)
             form.video_filename.data.save(video_upload_path)
+
         listing = Listing(
+            author_id=author_id,
             catagories=form.catagories.data,
-            city=form.city.data,
-            contact_information=form.contact_information.data,
-            sub_City=form.sub_City.data,
-            # kebele=form.kebele.data,
-            description=form.description.data,
-            price=form.price.data,
-            image_filename=image_filename,
-            video_filename=video_filename
+            city=form.city.data, 
+            contact_information=form.contact_information.data, 
+            sub_City=form.sub_City.data, 
+            description=form.description.data, 
+            price=form.price.data, 
+            image_filename=unique_filename,  # Store the unique filename in the database
+            video_filename=video_unique_filename if form.video_filename.data else None  # Store the unique video filename
         )
         db.session.add(listing)
         db.session.commit()
 
+        flash('Posted successfully', 'success')
         return redirect(url_for('auth.service'))
     return render_template('post.html', form=form)
 
@@ -120,7 +121,7 @@ def upload():
 # @login_required
 # def service():
 #     return render_template('service.html')
-
+        
 @auth.route('/Catagories')
 @login_required
 def catagories():
@@ -145,7 +146,7 @@ def about():
 def service():
     # Fetch data from the database
     all_listings = Listing.query.all()
-    form = SearchForm()
+    form = SearchFormss()
     # Create a list to store the data you want to display
     listings_data = []
 
@@ -161,13 +162,71 @@ def service():
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
             'video_filename': listing.video_filename,
-
+            
 
         }
         listings_data.append(listing_info)
+        
+
+    if form.validate_on_submit():
+        categories = form.categories.data
+        min_price = form.min_price.data
+        max_price = form.max_price.data
+        city = form.city.data
+        print("correct")
+        # Implement your search logic based on the parameters
+        for item in listings_data:
+            # Check if the item matches the selected category
+            if categories and item['catagories'] != categories:
+                continue
+
+            item_price = float(item['price'])
+            # Check if the item's price is within the selected price range
+            if min_price is not None and item_price <= float(min_price):
+                continue
+            if max_price is not None and item_price >= float(max_price):
+                continue
+
+            # Check if the item's city matches the selected city
+            if city and item['city'] != city:
+                continue
+            print(item)
+            # If all criteria match, add the item to the results
+            results.append(item)
+            # return redirect(url_for('auth.home'))
 
 
     return render_template('service.html', listings=listings_data, form=form)
+
+
+
+@auth.route('/get_data', methods=['GET'])
+def get_data():
+    # Query the database to get the data
+    data = Listing.query.all()
+
+    # Create a list to store the formatted data
+    formatted_data = []
+
+    # Iterate through the data and format it
+    for listing in data:
+        formatted_item = {
+            'id': listing.id,
+            'city': listing.city,
+            'catagories': listing.catagories,
+            'sub_City': listing.sub_City,
+            'price': listing.price,
+            'image_filename': listing.image_filename,
+            'description': listing.description,
+            'contact_information': listing.contact_information,
+            # 'kebele': listing.kebele,
+            'video_filename': listing.video_filename,
+            
+        }
+        formatted_data.append(formatted_item)
+    print(formatted_data)    
+    # Convert the formatted data to JSON using jsonify
+    return jsonify(formatted_data)
 
 
 @auth.route('/post/<int:listing_id>', methods=['GET'])
@@ -183,56 +242,174 @@ def view_listing(listing_id):
 
     return render_template('details.html', listing=listing)
 
-@auth.route('/search', methods = ['GET', 'POST'])
-def search():
-     # Fetch data from the database
-    data = Listing.query.all()
-    form = SearchForm()
-    listings_data = []
-    results = []
+@auth.route('/post/<int:listing_id>/update', methods=['GET', 'POST'])
+@login_required
+def update_post(listing_id):
+    # Retrieve the listing
+    listing = Listing.query.get_or_404(listing_id)
 
-    for listing in data:
-        listing_info = {
-        'id': listing.id,
-        'city': listing.city,
-        'catagories': listing.catagories,
-        'sub_City': listing.sub_City,
-        'price': listing.price,
-        'image_filename': listing.image_filename,
-        'description': listing.description,
-        'contact_information': listing.contact_information,
-        # 'kebele': listing.kebele,
-        'video_filename': listing.video_filename,
+    # Check if the current user has permission to update the post
+    if current_user != listing.author:
+        abort(403)  # Return a 403 Forbidden error if the user doesn't have permission
 
-
-    }
-
-    listings_data.append(listing_info)
-
+    # Create the form for updating the post
+    form = UploadForm()
 
     if form.validate_on_submit():
-        catagory = form.catagories.data
-        minPrice = form.min_price.data
-        maxPrice = form.max_price.data
-        City = form.city.data
-        SubCity = form.sub_City.data
+        # Update the fields of the existing listing object
+        listing.catagories = form.catagories.data
+        listing.city = form.city.data
+        listing.contact_information = form.contact_information.data
+        listing.sub_City = form.sub_City.data
+        listing.description = form.description.data
+        listing.price = form.price.data
 
-        for item in listings_data:
+        # Process file uploads
+        if form.image_filename.data:
+            # Generate a unique filename for the new image
+            new_image_filename = str(uuid.uuid4()) + secure_filename(form.image_filename.data.filename)
+            new_image_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], new_image_filename)
+            os.makedirs(os.path.dirname(new_image_upload_path), exist_ok=True)
+            form.image_filename.data.save(new_image_upload_path)
+
+            # Remove the old image if it exists
+            if listing.image_filename:
+                old_image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], listing.image_filename)
+                if os.path.exists(old_image_path):
+                    os.remove(old_image_path)
+
+            # Update the listing's image filename with the new unique filename
+            listing.image_filename = new_image_filename
+
+        if form.video_filename.data:
+            # Similar logic for generating a unique filename for videos
+            new_video_filename = str(uuid.uuid4()) + secure_filename(form.video_filename.data.filename)
+            new_video_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], new_video_filename)
+            os.makedirs(os.path.dirname(new_video_upload_path), exist_ok=True)
+            form.video_filename.data.save(new_video_upload_path)
+
+            # Remove the old video if it exists
+            if listing.video_filename:
+                old_video_path = os.path.join(current_app.config["UPLOAD_FOLDER"], listing.video_filename)
+                if os.path.exists(old_video_path):
+                    os.remove(old_video_path)
+
+            # Update the listing's video filename with the new unique filename
+            listing.video_filename = new_video_filename
+
+        # Commit the changes to the database
+        db.session.commit()
+        flash('Your post has been updated!', 'success')
+        return redirect(url_for('auth.view_listing', listing_id=listing.id))
+
+    elif request.method == 'GET':
+        # Populate the form with the current values of the listing
+        form.catagories.data = listing.catagories
+        form.city.data = listing.city
+        form.contact_information.data = listing.contact_information
+        form.sub_City.data = listing.sub_City
+        form.description.data = listing.description
+        form.price.data = listing.price
+        form.image_filename.data = listing.image_filename
+
+    return render_template('post.html', form=form, listing=listing)
+
+
+
+@auth.route('/post/<int:listing_id>/delete', methods=['POST'])
+@login_required
+def delete_post(listing_id):
+    # Retrieve the listing and its associated image filename
+    listing = Listing.query.get_or_404(listing_id)
+    image_filename = listing.image_filename
+
+    # Check if the user has permission to delete the post
+    if current_user != listing.author:
+        abort(403)
+
+    # Delete the image file from the "uploads" folder
+    if image_filename:
+        image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], image_filename)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+    # Delete the post from the database
+    db.session.delete(listing)
+    db.session.commit()
+
+    flash('Post deleted successfully', 'success')
+    return redirect(url_for('auth.service'))
+
+
+
+
+
+
+@auth.route('/searches', methods=['GET', 'POST'])
+def searchss():
+    form = SearchFormss()
+    results = []  # Initialize an empty list to store search results
+        # Query the database to get the data
+    data = Listing.query.all()
+
+    # Create a list to store the formatted data
+    formatted_data = []
+
+    # Iterate through the data and format it
+    for listing in data:
+        formatted_item = {
+            'id': listing.id,
+            'city': listing.city,
+            'catagories': listing.catagories,
+            'sub_City': listing.sub_City,
+            'price': listing.price,
+            'image_filename': listing.image_filename,
+            'description': listing.description,
+            'contact_information': listing.contact_information,
+            # 'kebele': listing.kebele,
+            'video_filename': listing.video_filename,
+            
+        }
+        formatted_data.append(formatted_item)
+    if form.validate_on_submit():
+        categories = form.categories.data
+        min_price = form.min_price.data
+        max_price = form.max_price.data
+        city = form.city.data
+        print("correct")
+        # Implement your search logic based on the parameters
+        for item in formatted_data:
+            # Check if the item matches the selected category
+            if categories and item['catagories'] != categories:
+                continue
+
+            item_price = float(item['price'])
+            # Check if the item's price is within the selected price range
+            if min_price is not None and item_price <= float(min_price):
+                continue
+            if max_price is not None and item_price >= float(max_price):
+                continue
+
+            # Check if the item's city matches the selected city
+            if city and item['city'] != city:
+                continue
             print(item)
-            if catagory and item['catagories'] != catagory:
-                continue
-            if minPrice is not None and item['price'] <= minPrice:
-                continue
-            if maxPrice is not None and item['price'] >= maxPrice:
-                continue
-            if City and item['city'] != city:
-                continue
-            if SubCity and item['sub_City'] != SubCity:
-                continue
+            # If all criteria match, add the item to the results
             results.append(item)
-        # search logic based on the parameters
+        #   return redirect(url_for('auth.home'))
 
-    return render_template('search.html', form=form, results=results)
+    return render_template('search_resultss.html', form=form, results=results)
+
+
+
+
+
+
+
+
+
+
+
 
 @auth.route('/logout')
 @login_required

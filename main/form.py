@@ -158,8 +158,26 @@ class UploadForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     catagories = SelectField('Catagories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('HouseSell', 'House Sell'),('other', 'Others')])
-    min_price = DecimalField('Minimum Price')
-    max_price = DecimalField('Maximum Price')
+    min_price = DecimalField('Minimum Price',validators=[Optional()])
+    max_price = DecimalField('Maximum Price', validators=[Optional()])
     city = SelectField('City',choices=area_choices)
     sub_City = SelectField('Sub_City',choices=area_choices)
     submit = SubmitField('Search')
+
+class SearchForms(FlaskForm):
+    categories = SelectField('Categories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell')])
+    min_price = DecimalField('Minimum Price', places=2)
+    max_price = DecimalField('Maximum Price', places=2)
+    city = SelectField('City',choices=area_choices)
+    submit = SubmitField('Search')
+class SearchFormss(FlaskForm):
+    categories = SelectField('Categories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell')])
+    min_price = DecimalField('Minimum Price', places=2)
+    max_price = DecimalField('Maximum Price', places=2)
+    city = SelectField('City',choices=area_choices)
+    submit = SubmitField('Search')
+
+
+
+class DeleteForm(FlaskForm):
+    pass

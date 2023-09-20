@@ -31,6 +31,7 @@ def create_app():
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config["UPLOAD_FOLDER"] = "Delala-broker/main/static/uploads"
+    # app.config["UPLOAD_FOLDER"] = "main/static/uploads"  # Specify the folder where you want to save uploaded files
     app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "gif", "mp4", "avi", "pdf", "doc", "docx"}
     app.config['STATIC_FOLDER'] = 'static'
 
@@ -42,7 +43,8 @@ def create_app():
     login_manager.login_message_category ='info'
 
     from main.auth import auth as auth_blueprint
+    from main.errors.handlers import errors 
     app.register_blueprint(auth_blueprint)
-
+    app.register_blueprint(errors)
 
     return app

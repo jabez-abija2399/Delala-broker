@@ -22,28 +22,25 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(),
                            onupdate=db.func.current_timestamp(), nullable=False)
-
+    listings = db.relationship('Listing', back_populates='author')
 
     def __repr__(self):
-        return f"<User(id={self.id}, fullName='{self.fullName}', username='{self.username}', " \
-               f"phoneNumber='{self.phoneNumber}', gender='{self.gender}')>"
-
+        return f"<User(id={self.id}, fullName='{self.fullName}', phoneNumber='{self.phoneNumber}', gender='{self.gender}')>"
 
 class Listing(db.Model):
     __tablename__ = 'listings'
 
     id = db.Column(db.Integer, primary_key=True)
-    city = db.Column(db.String(255), nullable=False)
-    sub_City = db.Column(db.Text, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    author = db.relationship('User', back_populates='listings')
+    city = db.Column(db.String(255), nullable=True)
+    sub_City = db.Column(db.Text, nullable=True)
     contact_information = db.Column(db.String(255), nullable=True)
-    # kebele = db.Column(db.String(50), nullable=False)
     catagories = db.Column(db.Text, nullable=True)
     description = db.Column(db.Text, nullable=False)
-    price = db.Column(db.String(50), nullable=False)
-    # max_price = db.Column(db.String(50), nullable=False) 
-    image_filename = db.Column(db.String(255), nullable=True)
+    price = db.Column(db.String(50), nullable=True)
+    image_filename = db.Column(db.String(255), nullable=True, unique=True)
     video_filename = db.Column(db.String(255))
-    # document_filename = db.Column(db.String(255))
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     
     def __repr__(self):
