@@ -171,10 +171,11 @@ class SearchForms(FlaskForm):
     city = SelectField('City',choices=area_choices)
     submit = SubmitField('Search')
 class SearchFormss(FlaskForm):
-    categories = SelectField('Categories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('Land Sell', 'Land Sell'),('other', 'Others')])
+    categories = SelectField('Categories', choices=[('', ''),('HouseRent', 'House Rent'),('HouseSell', 'House Sell'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('Land Sell', 'Land Sell'),('other', 'Others')])
     min_price = DecimalField('Minimum Price', places=2)
     max_price = DecimalField('Maximum Price', places=2)
     city = SelectField('City',choices=area_choices)
+    sub_City = SelectField('City',choices=area_choices)
     submit = SubmitField('Search')
 
 

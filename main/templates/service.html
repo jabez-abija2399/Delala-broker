@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Carousel End -->
 
 
@@ -82,16 +82,15 @@
         <!-- Search End -->
 <!-- <div class="container-xxl py-5">
     <div class="container"> -->
-        {% include 'services.html' %}  
-        {% include 'delate.html' %} 
+        {% include 'services.html' %}
 
          {% if results %}
     <div class="container">
     <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Search Results</h1>
-    
+
     <div class="row">
-           
-         
+
+
                 {% for item in results %}
         <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="product">
@@ -101,17 +100,17 @@
                     </div>
                     <div class="product-details">
                        <h3>{{ item.catagories }}</h3>
-                       <h3> Price ${{ item.price }}</h3> 
+                       <h3> Price ${{ item.price }}</h3>
                        <h5> City {{ item.city }}</h3>
                        </div>
                 </a>
             </div>
         </div>
                 {% endfor %}
-           
+
          </div>
 </div>
-    {% endif %}      
+    {% endif %}
 
 
 <!-- ... Other content ... -->

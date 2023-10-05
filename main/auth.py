@@ -24,7 +24,7 @@ def unauthorized():
 @auth.route('/')
 @login_required
 def home():
-    form = SearchForm()
+    form = SearchFormss()
     return render_template('home.html', form=form)
 
 
@@ -57,7 +57,7 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('auth.home'))
     form = RegistrationForm()
-    error_message = None 
+    error_message = None
 
     if form.validate_on_submit():
         if email_already_exists(form.email.data):
@@ -67,14 +67,14 @@ def register():
             error_message = "Phone number already exists. Please choose another."
             flash(error_message, 'danger')
 
-        else:  
+        else:
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             user = User(fullName=form.FullName.data,
                         email=form.email.data, phoneNumber=form.phoneNumber.data,
                         password=hashed_password)
             db.session.add(user)
             db.session.commit()
-                
+
             return redirect(url_for('auth.login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -89,7 +89,7 @@ def upload():
         # Generate a unique filename (e.g., using a UUID)
         unique_filename = str(uuid.uuid4()) + secure_filename(form.image_filename.data.filename)
         image_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], unique_filename)
-        
+
         # Save the uploaded file with the unique filename
         form.image_filename.data.save(image_upload_path)
 
@@ -102,11 +102,11 @@ def upload():
         listing = Listing(
             author_id=author_id,
             catagories=form.catagories.data,
-            city=form.city.data, 
-            contact_information=form.contact_information.data, 
-            sub_City=form.sub_City.data, 
-            description=form.description.data, 
-            price=form.price.data, 
+            city=form.city.data,
+            contact_information=form.contact_information.data,
+            sub_City=form.sub_City.data,
+            description=form.description.data,
+            price=form.price.data,
             image_filename=unique_filename,  # Store the unique filename in the database
             video_filename=video_unique_filename if form.video_filename.data else None  # Store the unique video filename
         )
@@ -121,7 +121,7 @@ def upload():
 # @login_required
 # def service():
 #     return render_template('service.html')
-        
+
 @auth.route('/Catagories')
 @login_required
 def catagories():
@@ -162,17 +162,18 @@ def service():
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
             'video_filename': listing.video_filename,
-            
+
 
         }
         listings_data.append(listing_info)
-        
+
 
     if form.validate_on_submit():
         categories = form.categories.data
         min_price = form.min_price.data
         max_price = form.max_price.data
         city = form.city.data
+        sub_City= form.sub_City.data
         print("correct")
         # Implement your search logic based on the parameters
         for item in listings_data:
@@ -182,9 +183,15 @@ def service():
 
             item_price = float(item['price'])
             # Check if the item's price is within the selected price range
-            if min_price is not None and item_price <= float(min_price):
+            # is not None
+            if min_price and item_price <= float(min_price):
                 continue
-            if max_price is not None and item_price >= float(max_price):
+            if max_price  and item_price >= float(max_price):
+                continue
+
+
+            # Check if the item's sub_City matches the selected city
+            if sub_City and item['sub_City'] != sub_City:
                 continue
 
             # Check if the item's city matches the selected city
@@ -196,7 +203,7 @@ def service():
             # return redirect(url_for('auth.home'))
 
 
-    return render_template('service.html', listings=listings_data, form=form)
+    return render_template('service.html', listings=listings_data, form=form, results=results)
 
 
 
@@ -221,10 +228,10 @@ def get_data():
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
             'video_filename': listing.video_filename,
-            
+
         }
         formatted_data.append(formatted_item)
-    print(formatted_data)    
+    print(formatted_data)
     # Convert the formatted data to JSON using jsonify
     return jsonify(formatted_data)
 
@@ -368,7 +375,7 @@ def searchss():
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
             'video_filename': listing.video_filename,
-            
+
         }
         formatted_data.append(formatted_item)
     if form.validate_on_submit():
@@ -376,6 +383,7 @@ def searchss():
         min_price = form.min_price.data
         max_price = form.max_price.data
         city = form.city.data
+        sub_City = form.sub_City.data
         print("correct")
         # Implement your search logic based on the parameters
         for item in formatted_data:
@@ -385,13 +393,17 @@ def searchss():
 
             item_price = float(item['price'])
             # Check if the item's price is within the selected price range
-            if min_price is not None and item_price <= float(min_price):
+            if min_price and item_price <= float(min_price):
                 continue
-            if max_price is not None and item_price >= float(max_price):
+            if max_price and item_price >= float(max_price):
                 continue
 
             # Check if the item's city matches the selected city
             if city and item['city'] != city:
+                continue
+
+            # Check if the item's sub_City matches the selected city
+            if sub_City and item['sub_City'] != sub_City:
                 continue
             print(item)
             # If all criteria match, add the item to the results
