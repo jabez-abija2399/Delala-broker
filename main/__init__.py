@@ -27,7 +27,7 @@ def create_app():
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///delala_brokerss.db'
 
     # Use PythonAnywhere's specific SQLite database URL
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/Abija23/Delala-broker/instance/delala_brokerss.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/Abija23/Delala-broker/instance/delala_brokers.db'
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config["UPLOAD_FOLDER"] = "Delala-broker/main/static/uploads"

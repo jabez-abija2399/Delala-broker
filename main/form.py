@@ -2,7 +2,7 @@ from flask_login import LoginManager, UserMixin
 from flask_wtf import FlaskForm
 from wtforms import (BooleanField, DecimalField, FileField, PasswordField,
                      RadioField, SelectField, StringField, SubmitField,
-                     TextAreaField)
+                     TextAreaField,MultipleFileField)
 from wtforms.fields import SelectMultipleField
 from wtforms.validators import (DataRequired, Email, EqualTo, Length, Optional,
                                 ValidationError)
@@ -151,7 +151,7 @@ class UploadForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     price = StringField('Price', validators=[DataRequired()])
     # max_price = StringField('max_rice', validators=[DataRequired()])
-    image_filename = FileField('Upload Image')
+    image_filenames = MultipleFileField('Upload Image')
     video_filename = FileField('Upload Video')
     # document_filename = FileField('Upload Document')
     submit = SubmitField('Post')

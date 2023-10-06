@@ -54,7 +54,60 @@
 
 
 
-{% include 'components/categories.html' %}
+
+<!-- Category Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Explore Brokerage Categories</h1>
+        <div class="row g-4">
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                <a class="cat-item rounded p-4" href="{{ url_for('auth.category', category_name='HouseRent') }}">
+                    <i class="fa fa-3x fa-home text-primary mb-4"></i>
+                    <h6 class="mb-3">House Rent</h6>
+                    <p class="mb-0">Find Rental Tenants</p>
+                </a>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                <a class="cat-item rounded p-4" href="{{ url_for('auth.category', category_name='CarRent') }}">
+                    <i class="fa fa-3x fa-car text-primary mb-4"></i>
+                    <h6 class="mb-3">Car Rent</h6>
+                    <p class="mb-0">Find Rental Tenants</p>
+                </a>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                <a class="cat-item rounded p-4" href="{{ url_for('auth.category', category_name='CarSell') }}">
+                    <i class="fa fa-3x fa-car-side text-primary mb-4"></i>
+                    <h6 class="mb-3">Car Sell</h6>
+                    <p class="mb-0">Connect with Buyers</p>
+                </a>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                <a class="cat-item rounded p-4" href="{{ url_for('auth.category', category_name='HomeSell') }}">
+                    <i class="fa fa-3x fa-home text-primary mb-4"></i>
+                    <h6 class="mb-3">Home Sell</h6>
+                    <p class="mb-0">Connect with Buyers</p>
+                </a>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                <a class="cat-item rounded p-4" href="{{ url_for('auth.category', category_name='Land Sell') }}">
+                    <i class="fa fa-3x fa-landmark text-primary mb-4"></i>
+                    <h6 class="mb-3">Land Sell</h6>
+                    <p class="mb-0">Connect with Buyers</p>
+                </a>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                <a class="cat-item rounded p-4" href="{{ url_for('auth.category', category_name='other') }}">
+                    <i class="fa fa-3x fa-cube  text-primary mb-4"></i>
+                    <h6 class="mb-3">Other</h6>
+                    <p class="mb-0">Connect with Buyers</p>
+                </a>
+            </div>
+            <!-- Add more categories here based on your website's features -->
+        </div>
+    </div>
+</div>
+
+<!-- Category End -->
 <!-- {% include 'services.html' %} -->
 {% include 'components/about.html' %}
 <!-- ... Other content ... -->
