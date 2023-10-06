@@ -43,42 +43,48 @@
 
 
 
-            <form method="POST">
-<div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
-    <div class="container">
-        <div class="row g-2">
-            <div class="col-md-10">
-                <div class="row g-2">
+<form method="POST" action='searches'>
+            <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
+                <div class="container">
+                    <div class="row g-2">
+                        <div class="col-md-10">
+                            <div class="row g-2">
 
-        {{ form.hidden_tag() }}
-        <div class="col-md-4">
-        <label for="categories">Categories:</label>
-        {{ form.categories(class="form-select border-0") }}
-        </div>
+                    {{ form.hidden_tag() }}
+                    <div class="col-md-4">
+                    <label for="categories">Categories:</label>
+                    {{ form.categories(class="form-select border-0") }}
+                    </div>
 
-        <div class="col-md-4">
-        <label for="min_price">Minimum Price:</label>
-        {{ form.min_price(class="form-control border-0") }}
-        </div>
+                    <div class="col-md-4">
+                    <label for="min_price">Minimum Price:</label>
+                    {{ form.min_price(class="form-control border-0") }}
+                    </div>
 
-        <div class="col-md-4">
-        <label for="max_price">Maximum Price:</label>
-        {{ form.max_price(class="form-control border-0") }}
-        </div>
+                    <div class="col-md-4">
+                    <label for="max_price">Maximum Price:</label>
+                    {{ form.max_price(class="form-control border-0") }}
+                    </div>
 
-        <div class="col-md-4">
-        <label for="city">City:</label>
-        {{ form.city(class="form-select border-0") }}
-        </div>
-    </div>
-    </div>
-            <div class="col-md-10 button">
-            {{ form.submit(class="button btn btn-dark border-0 w-100") }}
+                    <div class="col-md-4">
+                    <label for="city">City:</label>
+                    {{ form.city(class="form-select border-0") }}
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="sub_City">sub_City:</label>
+                        {{ form.sub_City(class="form-select border-0") }}
+                    </div>
+
+                </div>
+                </div>
+                        <div class="col-md-10 button">
+                        {{ form.submit(class="button btn btn-dark border-0 w-100") }}
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-    </form>
+                </form>
         <!-- Search End -->
 <!-- <div class="container-xxl py-5">
     <div class="container"> -->
@@ -99,9 +105,9 @@
                         <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="Listing Image">
                     </div>
                     <div class="product-details">
-                       <h3>{{ item.catagories }}</h3>
-                       <h3> Price ${{ item.price }}</h3>
-                       <h5> City {{ item.city }}</h3>
+                       <h2>catagorie: {{ item.catagories }}</h3>
+                       <h3> Price: {{ item.price }}</h3>
+                       <h5> City: {{ item.city }}</h3>
                        </div>
                 </a>
             </div>

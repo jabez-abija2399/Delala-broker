@@ -22,7 +22,6 @@ def unauthorized():
     return redirect(url_for('auth.login'))
 
 @auth.route('/')
-@login_required
 def home():
     form = SearchFormss()
     return render_template('home.html', form=form)
@@ -123,30 +122,27 @@ def upload():
 #     return render_template('service.html')
 
 @auth.route('/Catagories')
-@login_required
 def catagories():
     return render_template('catagories.html')
 
 @auth.route('/contact')
-@login_required
 def contact():
 
     return render_template('contact.html')
 
 
 @auth.route('/about')
-@login_required
 def about():
     return render_template('about.html')
 
 
 
 @auth.route('/Services', methods=['GET'])
-@login_required
 def service():
     # Fetch data from the database
     all_listings = Listing.query.all()
     form = SearchFormss()
+    results = []
     # Create a list to store the data you want to display
     listings_data = []
 
@@ -197,7 +193,7 @@ def service():
             # Check if the item's city matches the selected city
             if city and item['city'] != city:
                 continue
-            print(item)
+
             # If all criteria match, add the item to the results
             results.append(item)
             # return redirect(url_for('auth.home'))
@@ -237,7 +233,6 @@ def get_data():
 
 
 @auth.route('/post/<int:listing_id>', methods=['GET'])
-@login_required
 def view_listing(listing_id):
     # Fetch the specific listing from the database using the listing_id
     listing = Listing.query.get(listing_id)

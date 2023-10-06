@@ -4,17 +4,19 @@
         <div class="row">
         <div class="product-list">
             {% for listing in listings %}
-            
+
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="product">
                     <a href="/post/{{ listing['id'] }}">
+                    <h2>{{ listing.catagories }}</h2>
                     <div class="product-image">
                         <img src="{{ url_for('static', filename='uploads/' + listing.image_filename) }}" alt="Listing Image">
-                       
+
 
                     </div>
                     <div class="product-details">
-                        <h3>{{ listing.city }}</h3>
+
+                        <h3>City: {{ listing.city }}</h3>
                         <p class="price">Price: {{ listing.price }}</p>
                         View Details
                     </div>
