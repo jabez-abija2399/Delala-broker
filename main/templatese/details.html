@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block home %}
+<div class="container py-5">
+    <h1 class="listing-title"> {{ listing.catagories }}</h1>
+    
+    <div class="row">
+
+      <div class="col-md-6">
+       
+        <div class="image-gallery">
+            {% for image_filename in listing.image_filenames.split(',') %}
+                <img class="listing-image" src="{{ url_for('static', filename='uploads/' + image_filename) }}" alt="Listing Image">
+            {% endfor %}
+        </div>
+
+    </div>
+        
+        <div class="col-md-6">
+          {% if current_user == listing.author %}
+          <div>
+              <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('auth.update_post', listing_id=listing.id) }}" onclick="return confirmUpdate();">Update</a>
+              <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button> 
+          </div>
+      {% endif %}
+            <h2 class="listing-city">{{ listing.city }}</h2>
+            <p class="listing-info"><strong>Categories:</strong> {{ listing.catagories }}</p>
+            <p class="listing-info"><strong>Sub City:</strong> {{ listing.sub_City }}</p>
+            <p class="listing-info"><strong>Price:</strong> {{ listing.price }}</p>
+            <p class="listing-info"><strong>Contact Information:</strong> {{ listing.contact_information }}</p>
+            <p class="listing-info"><strong>Description:</strong> {{ listing.description }}</p>
+            {% if listing.video_filename %}
+              <p class="listing-info"><strong>Video:</strong> <a href="{{ url_for('static', filename='uploads/' + listing.video_filename) }}" target="_blank">View Video</a></p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+<!-- ... (your modal code) ... -->
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this Post?
+      </div>
+      <div class="modal-footer">
+         
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <form action="{{ url_for('auth.delete_post', listing_id=listing.id) }}" method="POST">
+            <input type="submit" class="btn btn-danger" type="submit" value="Delete">
+        
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+var flashMessage = "{{ flash_message }}"; // Replace with the actual variable name
+var flashMessageType = "{{ flash_message_type }}"; // Replace with the actual variable name
+
+if (flashMessage) {
+    showCustomAlert(flashMessage, flashMessageType);
+}
+</script>
+{% endblock %}
