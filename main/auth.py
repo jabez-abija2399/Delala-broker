@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 from flask import current_app
 from main import create_app
 import uuid
+from .utils import capitalize_first_letter
 
 
 auth = Blueprint('auth', __name__)
@@ -22,9 +23,8 @@ def unauthorized():
     return redirect(url_for('auth.login'))
 
 @auth.route('/')
-@login_required
 def home():
-    form = SearchForm()
+    form = SearchFormss()
     return render_template('home.html', form=form)
 
 
@@ -57,7 +57,7 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('auth.home'))
     form = RegistrationForm()
-    error_message = None 
+    error_message = None
 
     if form.validate_on_submit():
         if email_already_exists(form.email.data):
@@ -67,14 +67,14 @@ def register():
             error_message = "Phone number already exists. Please choose another."
             flash(error_message, 'danger')
 
-        else:  
+        else:
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
             user = User(fullName=form.FullName.data,
                         email=form.email.data, phoneNumber=form.phoneNumber.data,
                         password=hashed_password)
             db.session.add(user)
             db.session.commit()
-                
+
             return redirect(url_for('auth.login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -86,15 +86,24 @@ def upload():
     if form.validate_on_submit():
         author_id = current_user.id
 
-        # Generate a unique filename (e.g., using a UUID)
-        unique_filename = str(uuid.uuid4()) + secure_filename(form.image_filename.data.filename)
-        image_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], unique_filename)
-        
-        # Save the uploaded file with the unique filename
-        form.image_filename.data.save(image_upload_path)
+        # Create a list to store the unique image filenames
+        image_filenames = []
+
+        # Handle multiple image uploads
+        for image_file in form.image_filenames.data:
+            # Generate a unique filename for each image
+            unique_filename = str(uuid.uuid4()) + secure_filename(image_file.filename)
+            image_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], unique_filename)
+
+
+            # Save the uploaded image with the unique filename
+            image_file.save(image_upload_path)
+
+            # Append the unique filename to the list
+            image_filenames.append(unique_filename)
 
         if form.video_filename.data:
-            # Similar logic for generating a unique filename for videos
+            # Similar logic for generating a unique filename for the video
             video_unique_filename = str(uuid.uuid4()) + secure_filename(form.video_filename.data.filename)
             video_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], video_unique_filename)
             form.video_filename.data.save(video_upload_path)
@@ -102,14 +111,16 @@ def upload():
         listing = Listing(
             author_id=author_id,
             catagories=form.catagories.data,
-            city=form.city.data, 
-            contact_information=form.contact_information.data, 
-            sub_City=form.sub_City.data, 
-            description=form.description.data, 
-            price=form.price.data, 
-            image_filename=unique_filename,  # Store the unique filename in the database
-            video_filename=video_unique_filename if form.video_filename.data else None  # Store the unique video filename
+            city=form.city.data,
+            contact_information=form.contact_information.data,
+            sub_City=form.sub_City.data,
+            description=form.description.data,
+            price=form.price.data,
+            image_filenames=image_filenames,  # Store the list of unique image filenames
+            video_filename=video_unique_filename if form.video_filename.data else None
         )
+        listing.set_image_filenames(image_filenames)
+
         db.session.add(listing)
         db.session.commit()
 
@@ -117,36 +128,34 @@ def upload():
         return redirect(url_for('auth.service'))
     return render_template('post.html', form=form)
 
+
 # @auth.route('/Services')
 # @login_required
 # def service():
 #     return render_template('service.html')
-        
+
 @auth.route('/Catagories')
-@login_required
 def catagories():
     return render_template('catagories.html')
 
 @auth.route('/contact')
-@login_required
 def contact():
 
     return render_template('contact.html')
 
 
 @auth.route('/about')
-@login_required
 def about():
     return render_template('about.html')
 
 
 
 @auth.route('/Services', methods=['GET'])
-@login_required
 def service():
     # Fetch data from the database
     all_listings = Listing.query.all()
     form = SearchFormss()
+    results = []
     # Create a list to store the data you want to display
     listings_data = []
 
@@ -157,22 +166,23 @@ def service():
             'catagories': listing.catagories,
             'sub_City': listing.sub_City,
             'price': listing.price,
-            'image_filename': listing.image_filename,
+            'image_filename': listing.image_filenames,
             'description': listing.description,
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
             'video_filename': listing.video_filename,
-            
+
 
         }
         listings_data.append(listing_info)
-        
+
 
     if form.validate_on_submit():
         categories = form.categories.data
         min_price = form.min_price.data
         max_price = form.max_price.data
         city = form.city.data
+        sub_City= form.sub_City.data
         print("correct")
         # Implement your search logic based on the parameters
         for item in listings_data:
@@ -182,21 +192,27 @@ def service():
 
             item_price = float(item['price'])
             # Check if the item's price is within the selected price range
-            if min_price is not None and item_price <= float(min_price):
+            # is not None
+            if min_price and item_price <= float(min_price):
                 continue
-            if max_price is not None and item_price >= float(max_price):
+            if max_price  and item_price >= float(max_price):
+                continue
+
+
+            # Check if the item's sub_City matches the selected city
+            if sub_City and item['sub_City'] != sub_City:
                 continue
 
             # Check if the item's city matches the selected city
             if city and item['city'] != city:
                 continue
-            print(item)
+
             # If all criteria match, add the item to the results
             results.append(item)
             # return redirect(url_for('auth.home'))
 
 
-    return render_template('service.html', listings=listings_data, form=form)
+    return render_template('service.html', listings=listings_data, form=form, results=results)
 
 
 
@@ -221,16 +237,15 @@ def get_data():
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
             'video_filename': listing.video_filename,
-            
+
         }
         formatted_data.append(formatted_item)
-    print(formatted_data)    
+    print(formatted_data)
     # Convert the formatted data to JSON using jsonify
     return jsonify(formatted_data)
 
 
 @auth.route('/post/<int:listing_id>', methods=['GET'])
-@login_required
 def view_listing(listing_id):
     # Fetch the specific listing from the database using the listing_id
     listing = Listing.query.get(listing_id)
@@ -252,7 +267,7 @@ def update_post(listing_id):
     if current_user != listing.author:
         abort(403)  # Return a 403 Forbidden error if the user doesn't have permission
 
-    # Create the form for updating the post
+    # Create the form for updating the post, including the ability to upload multiple images
     form = UploadForm()
 
     if form.validate_on_submit():
@@ -263,23 +278,35 @@ def update_post(listing_id):
         listing.sub_City = form.sub_City.data
         listing.description = form.description.data
         listing.price = form.price.data
+        # listing.image_filenames = form.image_filenames.data
 
         # Process file uploads
-        if form.image_filename.data:
-            # Generate a unique filename for the new image
-            new_image_filename = str(uuid.uuid4()) + secure_filename(form.image_filename.data.filename)
-            new_image_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], new_image_filename)
-            os.makedirs(os.path.dirname(new_image_upload_path), exist_ok=True)
-            form.image_filename.data.save(new_image_upload_path)
+        if form.image_filenames.data:
+            # Remove the old images if they exist
+            if listing.image_filenames:
+                for old_image_filename in listing.image_filenames:
+                    old_image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], old_image_filename)
+                    # if os.path.exists(old_image_path):
+                    #     os.remove(old_image_path)
+                    if os.path.exists(old_image_path):
+                        try:
+                            os.remove(old_image_path)
+                        except OSError as e:
+                            # Handle the error gracefully (e.g., log it)
+                            print(f"Error deleting file: {e}")
 
-            # Remove the old image if it exists
-            if listing.image_filename:
-                old_image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], listing.image_filename)
-                if os.path.exists(old_image_path):
-                    os.remove(old_image_path)
 
-            # Update the listing's image filename with the new unique filename
-            listing.image_filename = new_image_filename
+            # Generate unique filenames for the new images and save them
+            new_image_filenames = []
+            for image_file in form.image_filenames.data:
+                new_image_filename = str(uuid.uuid4()) + secure_filename(image_file.filename)
+                new_image_upload_path = os.path.join(current_app.config["UPLOAD_FOLDER"], new_image_filename)
+                os.makedirs(os.path.dirname(new_image_upload_path), exist_ok=True)
+                image_file.save(new_image_upload_path)
+                new_image_filenames.append(new_image_filename)
+
+            # Update the listing's image filenames with the new unique filenames
+            listing.set_image_filenames(new_image_filenames)
 
         if form.video_filename.data:
             # Similar logic for generating a unique filename for videos
@@ -310,7 +337,6 @@ def update_post(listing_id):
         form.sub_City.data = listing.sub_City
         form.description.data = listing.description
         form.price.data = listing.price
-        form.image_filename.data = listing.image_filename
 
     return render_template('post.html', form=form, listing=listing)
 
@@ -319,19 +345,25 @@ def update_post(listing_id):
 @auth.route('/post/<int:listing_id>/delete', methods=['POST'])
 @login_required
 def delete_post(listing_id):
-    # Retrieve the listing and its associated image filename
+    # Retrieve the listing and its associated image filenames
     listing = Listing.query.get_or_404(listing_id)
-    image_filename = listing.image_filename
+    image_filenames = listing.image_filenames
 
     # Check if the user has permission to delete the post
     if current_user != listing.author:
         abort(403)
 
-    # Delete the image file from the "uploads" folder
-    if image_filename:
-        image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], image_filename)
-        if os.path.exists(image_path):
-            os.remove(image_path)
+    # Delete the image files from the "uploads" folder
+    for image_filename in image_filenames:
+        if image_filename:
+            image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], image_filename)
+            if os.path.exists(image_path):
+                try:
+                    os.remove(image_path)
+                except OSError as e:
+                    # Handle the error gracefully (e.g., log it)
+                    print(f"Error deleting file: {e}")
+
 
     # Delete the post from the database
     db.session.delete(listing)
@@ -339,6 +371,7 @@ def delete_post(listing_id):
 
     flash('Post deleted successfully', 'success')
     return redirect(url_for('auth.service'))
+
 
 
 
@@ -368,7 +401,7 @@ def searchss():
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
             'video_filename': listing.video_filename,
-            
+
         }
         formatted_data.append(formatted_item)
     if form.validate_on_submit():
@@ -376,6 +409,7 @@ def searchss():
         min_price = form.min_price.data
         max_price = form.max_price.data
         city = form.city.data
+        sub_City = form.sub_City.data
         print("correct")
         # Implement your search logic based on the parameters
         for item in formatted_data:
@@ -385,13 +419,17 @@ def searchss():
 
             item_price = float(item['price'])
             # Check if the item's price is within the selected price range
-            if min_price is not None and item_price <= float(min_price):
+            if min_price and item_price <= float(min_price):
                 continue
-            if max_price is not None and item_price >= float(max_price):
+            if max_price and item_price >= float(max_price):
                 continue
 
             # Check if the item's city matches the selected city
             if city and item['city'] != city:
+                continue
+
+            # Check if the item's sub_City matches the selected city
+            if sub_City and item['sub_City'] != sub_City:
                 continue
             print(item)
             # If all criteria match, add the item to the results
@@ -402,9 +440,21 @@ def searchss():
 
 
 
+@auth.route('/category/<string:category_name>')
+def category(category_name):
+    # Query the database to get listings that match the specified category
+    listings = Listing.query.filter_by(catagories=category_name).all()
+    print(listings)
+    return render_template('catagories.html', category_name=category_name, listings=listings)
 
 
 
+
+@auth.context_processor
+def inject_user_name():
+    user_name = current_user.fullName if current_user.is_authenticated else None
+    capitalized_user_name = capitalize_first_letter(user_name)
+    return dict(current_user_name=capitalized_user_name)
 
 
 

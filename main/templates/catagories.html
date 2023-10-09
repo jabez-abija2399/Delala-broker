@@ -1,10 +1,40 @@
-<!-- broker_list.html -->
 {% extends 'layout.html' %}
 
 {% block home %}
-<!-- Broker List Page Content -->
-{% include 'components/carousel.html' %}
-{% include 'components/search.html' %}
-{% include 'components/categories.html' %}
-<!-- ... Other content ... -->
+<!-- Category Listings Start -->
+<div class="container">
+    <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">{{ category_name }}</h1>
+    
+    <div class="row">
+  
+
+        {% for listing in listings %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="product">
+                
+                <a href="/post/{{ listing['id'] }}">
+                    <div class="product-image">
+                        {% if listing.image_filenames %}
+                        <img src="{{ url_for('static', filename='uploads/' + listing.image_filenames.split(',')[0]) }}" alt="Listing Image">
+
+                        {% else %}
+                            <img src="{{ url_for('static', filename='uploads/placeholder.jpg') }}" alt="Placeholder Image">
+                        {% endif %}
+                    </div>
+                    <div class="product-details">
+                    <h3>{{ listing.catagories }}</h3>
+                    <h3> Price ${{ listing.price }}</h3> 
+                    <h5> City {{ listing.city }}</h3>
+                    </div>
+                </a>
+                
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+<!-- Category Listings End -->
 {% endblock %}

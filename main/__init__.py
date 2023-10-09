@@ -27,7 +27,7 @@ def create_app():
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///delala_brokerss.db'
 
     # Use PythonAnywhere's specific SQLite database URL
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/Abija23/Delala-broker/main/delala_brokerss.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/Abija23/Delala-broker/instance/delala_brokers.db'
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config["UPLOAD_FOLDER"] = "Delala-broker/main/static/uploads"
@@ -43,7 +43,7 @@ def create_app():
     login_manager.login_message_category ='info'
 
     from main.auth import auth as auth_blueprint
-    from main.errors.handlers import errors 
+    from main.errors.handlers import errors
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(errors)
 

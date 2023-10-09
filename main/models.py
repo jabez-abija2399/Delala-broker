@@ -39,9 +39,16 @@ class Listing(db.Model):
     catagories = db.Column(db.Text, nullable=True)
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.String(50), nullable=True)
-    image_filename = db.Column(db.String(255), nullable=True, unique=True)
+    image_filenames = db.Column(db.Text)
     video_filename = db.Column(db.String(255))
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
-    
+
     def __repr__(self):
         return f"<Listing(id={self.id}, city='{self.city}')>"
+    def set_image_filenames(self, filenames):
+        # Serialize the list of image filenames into a single string
+        self.image_filenames = ",".join(filenames)
+
+    def get_image_filenames(self):
+        # Deserialize the image filenames from the stored string
+        return self.image_filenames.split(",")

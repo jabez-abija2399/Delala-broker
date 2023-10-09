@@ -2,7 +2,7 @@ from flask_login import LoginManager, UserMixin
 from flask_wtf import FlaskForm
 from wtforms import (BooleanField, DecimalField, FileField, PasswordField,
                      RadioField, SelectField, StringField, SubmitField,
-                     TextAreaField)
+                     TextAreaField,MultipleFileField)
 from wtforms.fields import SelectMultipleField
 from wtforms.validators import (DataRequired, Email, EqualTo, Length, Optional,
                                 ValidationError)
@@ -23,7 +23,7 @@ class RegistrationForm(FlaskForm,UserMixin):
         user =User.query.filter_by(phoneNumber=phoneNumber.data).first()
         if user:
             raise ValidationError('that phone number is taken. please choose diffrent one')
-        
+
     def validate_username(self, email):
         user =User.query.filter_by(email=email.data).first()
         if user:
@@ -151,13 +151,13 @@ class UploadForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     price = StringField('Price', validators=[DataRequired()])
     # max_price = StringField('max_rice', validators=[DataRequired()])
-    image_filename = FileField('Upload Image')
+    image_filenames = MultipleFileField('Upload Image')
     video_filename = FileField('Upload Video')
     # document_filename = FileField('Upload Document')
     submit = SubmitField('Post')
 
 class SearchForm(FlaskForm):
-    catagories = SelectField('Catagories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('HouseSell', 'House Sell'),('other', 'Others')])
+    catagories = SelectField('Catagories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('HouseSell', 'House Sell'),('Land Sell', 'Land Sell'),('other', 'Others')])
     min_price = DecimalField('Minimum Price',validators=[Optional()])
     max_price = DecimalField('Maximum Price', validators=[Optional()])
     city = SelectField('City',choices=area_choices)
@@ -171,10 +171,11 @@ class SearchForms(FlaskForm):
     city = SelectField('City',choices=area_choices)
     submit = SubmitField('Search')
 class SearchFormss(FlaskForm):
-    categories = SelectField('Categories', choices=[('', ''),('HouseRent', 'House Rent'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell')])
+    categories = SelectField('Categories', choices=[('', ''),('HouseRent', 'House Rent'),('HouseSell', 'House Sell'), ('CarRent', 'Car Rent'),('CarSell', 'Car Sell'),('Land Sell', 'Land Sell'),('other', 'Others')])
     min_price = DecimalField('Minimum Price', places=2)
     max_price = DecimalField('Maximum Price', places=2)
     city = SelectField('City',choices=area_choices)
+    sub_City = SelectField('City',choices=area_choices)
     submit = SubmitField('Search')
 
 
