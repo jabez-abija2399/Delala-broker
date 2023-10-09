@@ -1,0 +1,35 @@
+<div class="container-xxl py-5">
+    <div class="container">
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Recent Post</h1>
+        <div class="row">
+            <div class="product-list">
+                {% for listing in listings %}
+                
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <a href="/post/{{ listing['id'] }}">
+                    <div class="product">
+                        
+                            <div class="product-image">
+                                {% if listing.image_filename %}
+                                <img src="{{ url_for('static', filename='uploads/' + listing.image_filename.split(',')[0]) }}" alt="Listing Image">
+
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='uploads/placeholder.jpg') }}" alt="Placeholder Image">
+                                {% endif %}
+                            </div>
+                       
+                        <div class="product-details">
+                            <h3>{{ listing.city }}</h3>
+                            <p class="price">Price: {{ listing.price }}</p>
+                            View Details
+                        </div>
+
+                    </div>
+                </a>
+                </div>
+            
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
