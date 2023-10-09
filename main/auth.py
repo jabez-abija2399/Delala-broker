@@ -396,7 +396,7 @@ def searchss():
             'catagories': listing.catagories,
             'sub_City': listing.sub_City,
             'price': listing.price,
-            'image_filename': listing.image_filename,
+            'image_filename': listing.image_filenames,
             'description': listing.description,
             'contact_information': listing.contact_information,
             # 'kebele': listing.kebele,
@@ -410,31 +410,35 @@ def searchss():
         max_price = form.max_price.data
         city = form.city.data
         sub_City = form.sub_City.data
+
         print("correct")
         # Implement your search logic based on the parameters
         for item in formatted_data:
             # Check if the item matches the selected category
-            if categories and item['catagories'] != categories:
+            if categories  and item['catagories'] != categories:
                 continue
 
             item_price = float(item['price'])
             # Check if the item's price is within the selected price range
-            if min_price and item_price <= float(min_price):
+            # is not None
+            if min_price  and item_price <= float(min_price):
                 continue
-            if max_price and item_price >= float(max_price):
-                continue
-
-            # Check if the item's city matches the selected city
-            if city and item['city'] != city:
+            if max_price  and item_price >= float(max_price):
                 continue
 
             # Check if the item's sub_City matches the selected city
             if sub_City and item['sub_City'] != sub_City:
                 continue
+
+
+            # Check if the item's city matches the selected city
+            if city and item['city'] != city:
+                continue
+
             print(item)
             # If all criteria match, add the item to the results
             results.append(item)
-        #   return redirect(url_for('auth.home'))
+    # return redirect(url_for('auth.service'))
 
     return render_template('search_resultss.html', form=form, results=results)
 
